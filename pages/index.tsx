@@ -49,8 +49,8 @@ export default function Index({ staticPropsPage }: PageProps) {
         {page?.image ? (
           <Image
             className="mb-4"
-            width={300}
-            height={300}
+            width={640}
+            height={360}
             src={page?.image.url}
             alt={page?.image.title}
             {...(page?.image?.$ && page?.image?.$.url)}
@@ -63,6 +63,53 @@ export default function Index({ staticPropsPage }: PageProps) {
             dangerouslySetInnerHTML={{ __html: page?.rich_text }}
           />
         ) : null}
+
+        <div className="space-y-8 max-w-screen-sm mt-4">
+          {page?.blocks?.map((item, index) => {
+            const { block } = item;
+            const isImageLeft = block.layout === "image_left";
+
+            return (
+              <div
+                key={block._metadata.uid}
+                {...(page?.$ && page?.$[`blocks__${index}`])}
+                className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 ${
+                  isImageLeft ? "md:flex-row" : "md:flex-row-reverse"
+                }`}
+              >
+                <div className="w-full md:w-1/2">
+                  {block.image ? (
+                    <Image
+                      src={block.image.url}
+                      alt={block.image.title}
+                      width={200}
+                      height={112}
+                      className="w-full"
+                      {...(block?.$ && block?.$.image)}
+                    />
+                  ) : null}
+                </div>
+                <div className="w-full md:w-1/2">
+                  {block.title ? (
+                    <h2
+                      className="text-2xl font-bold"
+                      {...(block?.$ && block?.$.title)}
+                    >
+                      {block.title}
+                    </h2>
+                  ) : null}
+                  {block.copy ? (
+                    <div
+                      {...(block?.$ && block?.$.copy)}
+                      dangerouslySetInnerHTML={{ __html: block.copy }}
+                      className="prose"
+                    />
+                  ) : null}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
     </main>
   );
