@@ -1,4 +1,4 @@
-import { getPage } from "@/lib/contentstack";
+import { getPage, initLivePreview } from "@/lib/contentstack";
 import { Page } from "@/lib/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -25,11 +25,12 @@ export default function Index({ staticPropsPage }: PageProps) {
   };
 
   useEffect(() => {
-    ContentstackLivePreview.onLiveEdit(getContent);
+    initLivePreview();
+    ContentstackLivePreview.onEntryChange(getContent);
   }, []);
 
   return (
-    <main className="max-w-screen-2xl mx-auto">
+    <main className="max-w-screen-md mx-auto">
       <section className="p-4">
         {page?.title ? (
           <h1
@@ -73,7 +74,7 @@ export default function Index({ staticPropsPage }: PageProps) {
               <div
                 key={block._metadata.uid}
                 {...(page?.$ && page?.$[`blocks__${index}`])}
-                className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 ${
+                className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 bg-slate-100 ${
                   isImageLeft ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
